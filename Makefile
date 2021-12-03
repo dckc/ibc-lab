@@ -1,3 +1,8 @@
+HERMES=docker run --rm -vhermes-home:/home/hermes:z -v$$PWD:/config hermes -c /config/hermes.config
+
+start:
+	$(HERMES) start
+
 task/docker-image: task hermes.Dockerfile
 	docker build -t hermes . -f hermes.Dockerfile | tail -n 2 >$@
 	touch $@
@@ -15,7 +20,6 @@ ADDR_COSMOS=cosmos18hcdewnyhl6hj6wkz2dwq8slfh8vrnetzxy33p
 CHAIN_AG=agoricdev-6
 CHAIN_COSMOS=cosmoshub-testnet
 KEYFILE=/keybase/private/kc_colo29,dckc/ibc-fun-key
-HERMES=docker run --rm -vhermes-home:/home/hermes:z -v$$PWD:/config hermes -c /config/hermes.config
 
 task:
 	mkdir -p task
