@@ -1,6 +1,6 @@
 HERMES=docker run --rm -vhermes-home:/home/hermes:z -v$$PWD:/config hermes -c /config/hermes.config
 
-![15.00 Photon in my wallet](https://www.diigo.com/file/image/brpqocpzpbeerecapzepbqeqpq/SwingSet+Solo+REPL+Demo.jpg)
+screenshot: [15.00 Photon in my wallet](https://www.diigo.com/item/image/1464w/uvw6)
 
 # start: task/create-channel
 start:
