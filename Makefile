@@ -1,5 +1,7 @@
 HERMES=docker run --rm -vhermes-home:/home/hermes:z -v$$PWD:/config hermes -c /config/hermes.config
 
+![15.00 Photon in my wallet](https://www.diigo.com/file/image/brpqocpzpbeerecapzepbqeqpq/SwingSet+Solo+REPL+Demo.jpg)
+
 # start: task/create-channel
 start:
 	$(HERMES) start
