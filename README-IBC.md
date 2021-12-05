@@ -26,7 +26,7 @@ As detailed in `Makefile`, `hermes.Dockerfile`, and `hermes.config`:
  - import ("recover") secrets for accounts on both chains
  - tap faucet.testnet.cosmos.network to fund cosmos account `cosmos18hcdewnyhl6hj6wkz2dwq8slfh8vrnetzxy33p`
  - `cargo build` and such to make a docker image
-   - **NOTE**: needs `/etc/ssl/certs/ca-certificates.crt`
+   - **NOTE**: needs `/etc/ssl/certs/ca-certificates.crt` [ibc-rs/pull/1647](https://github.com/informalsystems/ibc-rs/pull/1647)
  - prepare `hermes.config`
  - `hermes create channel`
  - `hermes start`
