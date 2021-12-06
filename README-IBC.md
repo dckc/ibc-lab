@@ -3,11 +3,79 @@ I got my relayer to relay an IBC payment from the cosmos testnet to our devnet!
 ![15.00 Photon in my wallet](https://www.diigo.com/file/image/brpqocpzpbeerecapzepbqeqpq/SwingSet+Solo+REPL+Demo.jpg)
 
 
-## Background
+## Starting a hermes relayer between cosmos and agoric testnets
 
-most clues are from
- - [agoric-sdk pegasus/demo.md](https://github.com/Agoric/agoric-sdk/blob/master/packages/pegasus/demo.md)
- - [Agoric ↔ Pooltoy IBC Testnet [WIP]](https://hackmd.io/YYf5lsJXSSuatstpRDSs8g?view)
+[Hermes: IBC Relayer CLI](https://github.com/informalsystems/ibc-rs/tree/master/relayer-cli)
+
+As detailed in `Makefile`, `hermes.Dockerfile`, `hermes.config`, and `docker-compose.yml`:
+ 1. build a hermes-image (v0.9.0)
+ 2. create a docker volume for the state
+ 3. generate a mnemonic; import ("recover") secrets for accounts on both chains
+    - **Update `ADDR_AG`, `ADDR_COSMOS` in `Makefile`**
+ 4. tap cosmos, agoric faucets
+ 5. create an IBC channel
+    - Take note of the channel ids
+ 6. start the relayer
+
+
+Creating the IBC channel results in something like this that includes the channel ids:
+
+```
+2021-12-06T21:43:16.791053Z DEBUG ThreadId(01) do_chan_open_finalize for src_channel_id: channel-43, dst_channel_id: channel-3
+Success: Channel {
+    ordering: Unordered,
+    a_side: ChannelSide {
+        chain: ProdChainHandle {
+            chain_id: ChainId {
+                id: "cosmoshub-testnet",
+                version: 0,
+            },
+            runtime_sender: Sender { .. },
+        },
+        client_id: ClientId(
+            "07-tendermint-54",
+        ),
+        connection_id: ConnectionId(
+            "connection-46",
+        ),
+        port_id: PortId(
+            "transfer",
+        ),
+        channel_id: Some(
+            ChannelId(
+                "channel-43",
+            ),
+        ),
+    },
+    b_side: ChannelSide {
+        chain: ProdChainHandle {
+            chain_id: ChainId {
+                id: "agoricdev-6",
+                version: 6,
+            },
+            runtime_sender: Sender { .. },
+        },
+        client_id: ClientId(
+            "07-tendermint-5",
+        ),
+        connection_id: ConnectionId(
+            "connection-5",
+        ),
+        port_id: PortId(
+            "transfer",
+        ),
+        channel_id: Some(
+            ChannelId(
+                "channel-3",
+            ),
+        ),
+    },
+    connection_delay: 0ns,
+    version: Some(
+        "ics20-1",
+    ),
+}
+```
 
 ## Provision and Fund Relayer Account on agorictest-6
 
@@ -17,21 +85,6 @@ I don't have good notes on how I did this... `agoric start --devnet`? Anyway... 
 
 I do see where I funded it using the normal devnet faucet in discord:
 https://discord.com/channels/585576150827532298/767231925646524446/916205759753228289
-
-## Starting a hermes relayer
-
-[Hermes: IBC Relayer CLI](https://github.com/informalsystems/ibc-rs/tree/master/relayer-cli)
-
-As detailed in `Makefile`, `hermes.Dockerfile`, and `hermes.config`:
- - import ("recover") secrets for accounts on both chains
- - tap faucet.testnet.cosmos.network to fund cosmos account `cosmos18hcdewnyhl6hj6wkz2dwq8slfh8vrnetzxy33p`
- - `cargo build` and such to make a docker image
-   - **NOTE**: needs `/etc/ssl/certs/ca-certificates.crt` [ibc-rs/pull/1647](https://github.com/informalsystems/ibc-rs/pull/1647)
- - prepare `hermes.config`
- - `hermes create channel`
- - `hermes start`
-
-See Makefile.
 
 ## Create peg and import issuer
 
@@ -73,4 +126,11 @@ We can look at the transaction and see the details:
 
 ## Payment shows up in agoric wallet
 
-IOU screenshot
+See screenshot above.
+
+## Acknowledgements
+
+most clues are from
+ - [agoric-sdk pegasus/demo.md](https://github.com/Agoric/agoric-sdk/blob/master/packages/pegasus/demo.md)
+ - [Agoric ↔ Pooltoy IBC Testnet [WIP]](https://hackmd.io/YYf5lsJXSSuatstpRDSs8g?view)
+
