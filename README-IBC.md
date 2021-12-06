@@ -7,16 +7,16 @@ I got my relayer to relay an IBC payment from the cosmos testnet to our devnet!
 
 [Hermes: IBC Relayer CLI](https://github.com/informalsystems/ibc-rs/tree/master/relayer-cli)
 
-As detailed in `Makefile`, `hermes.Dockerfile`, `hermes.config`, and `docker-compose.yml`:
- 1. build a hermes-image (v0.9.0)
- 2. create a docker volume for the state
- 3. generate a mnemonic; import ("recover") secrets for accounts on both chains
-    - **Update `ADDR_AG`, `ADDR_COSMOS` in `Makefile`**
- 4. tap cosmos, agoric faucets
- 5. create an IBC channel
-    - Take note of the channel ids
- 6. start the relayer
-
+ 1. `make task/restore-keys` to:
+    - build a hermes-image (v0.9.0)
+    - create a docker volume for the state
+    - generate a mnemonic; import ("recover") secrets for accounts on both chains
+ 2. **Update `ADDR_AG`, `ADDR_COSMOS` in `Makefile`** with the addresses from step 1.
+ 3. `make task/create-channel` to:
+    - tap cosmos, agoric faucets
+    - create an IBC channel
+ 4. Take note of the channel ids (details below)
+ 5. `make start` or `docker-compose up -d` to start the relayer.
 
 Creating the IBC channel results in something like this that includes the channel ids:
 
