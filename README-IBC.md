@@ -77,18 +77,40 @@ Success: Channel {
 }
 ```
 
-## Provision and Fund Relayer Account on agorictest-6
+## Provision user account on agorictest-6
+
+Normally [Setting up an Agoric Dapp Client with docker compose](https://github.com/Agoric/agoric-sdk/wiki/Setting-up-an-Agoric-Dapp-Client-with-docker-compose) would suffice, but:
+
+**ISSUE**: needs `home.pegasusConnections` special power due to
+https://github.com/Agoric/agoric-sdk/issues/4153
 
 I don't have good notes on how I did this... `agoric start --devnet`? Anyway... the address is
 
-`agoric1c227ytfhksuen7graauu4nq7htwgtr72ujelfg`
+`agoric18kzgpc36eacsdhx8wrdjywvdu3s6dsg2ae3t54`
 
-I do see where I funded it using the normal devnet faucet in discord:
-https://discord.com/channels/585576150827532298/767231925646524446/916205759753228289
 
 ## Create peg and import issuer
 
- - started wallet client with REPL using [Setting up an Agoric Dapp Client with docker compose · Agoric/agoric\-sdk Wiki](https://github.com/Agoric/agoric-sdk/wiki/Setting-up-an-Agoric-Dapp-Client-with-docker-compose)
+
+_IOU pointer to `contract/src/deploy-peg.js`_
+mostly follow pegasus/demo.md
+
+```
+$ agoric deploy contract/src/deploy-peg.js
+Open CapTP connection to ws://127.0.0.1:8000/private/captp...o
+agoric: deploy: running /home/connolly/projects/agoric/ibc-fun/contract/src/deploy-peg.js
+agoric: deploy: Deploy script will run with Node.js ESM
+awaiting home...
+awaiting pegasusConnections...
+pegasusConnections: 11
+getting instance, publicFacet
+creating peg-channel-10-uphoton from /ibc-port/transfer/unordered/ics20-1/ibc-channel/channel-10
+await brand, issuer, board...
+{ issuerBoardId: '495234043' } {
+  cosmos: { keyword: 'Photon', denom: 'uphoton', decimalPlaces: 6 },
+  agoric: { channel: 'channel-10' }
+}
+```
 
 mostly follow pegasus/demo.md (IOU details)
 
@@ -127,6 +149,27 @@ We can look at the transaction and see the details:
 ## Payment shows up in agoric wallet
 
 See screenshot above.
+
+## IBC Send using Zoe Offers
+
+```
+$ agoric deploy contract/src/deploy-ibc-send.js
+Open CapTP connection to ws://127.0.0.1:8000/private/captp...o
+agoric: deploy: running /home/connolly/projects/agoric/ibc-fun/contract/src/deploy-ibc-send.js
+agoric: deploy: Deploy script will run with Node.js ESM
+awaiting home...
+await peg, instance...
+await transferInvitation, brand, balance...
+await payment... {
+  gross: { brand: Object [Alleged: Local10 brand] {}, value: 75000000n },
+  amount: { brand: Object [Alleged: Local10 brand] {}, value: 250000n }
+}
+await result...
+{
+  result: undefined,
+  net: { brand: Object [Alleged: Local10 brand] {}, value: 74750000n }
+}
+```
 
 ## Acknowledgements
 
