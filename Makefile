@@ -4,6 +4,7 @@ IMAGE_AGORIC=agoric/agoric-sdk:agoricdev-6
 
 HERMES=docker run --rm -vhermes-home:/home/hermes:z -v$$PWD:/config hermes -c /config/hermes.config
 
+KEYFILE=ibc-relay-mnemonic
 task/restore-keys: $(KEYFILE) task/hermes-image task/hermes-volume hermes.config
 	MNEMONIC="$$(cat $(KEYFILE))"; \
 	echo $$MNEMONIC | sha1sum ; \
@@ -27,7 +28,6 @@ task/hermes-image: docker-compose.yml hermes.Dockerfile
 	docker-compose build
 	mkdir -p task && touch $@
 
-KEYFILE=ibc-relay-mnemonic
 $(KEYFILE): task/agoric-image
 	docker run --rm $(IMAGE_AGORIC) keys mnemonic >$@
 	chmod -w $@
