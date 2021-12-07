@@ -49,7 +49,7 @@ task/tap-cosmos-faucet: hermes.config
 	curl -X POST -d '{"address": "$(ADDR_COSMOS)"}' https://faucet.testnet.cosmos.network
 	mkdir -p task && touch $@
 
-RPC_AG=http://139.59.8.130:26657
+RPC_AG=http://46.101.220.43:26657
 
 task/tap-agoric-faucet: hermes.config
 	@echo if the balance below is empty,
