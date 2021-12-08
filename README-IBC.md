@@ -12,8 +12,9 @@ _Grab the Makefile etc. by, for example, cloning this gist. Then:_
     - create a docker volume for the state
     - generate a mnemonic; import ("recover") secrets for accounts on both chains
  2. **Update `ADDR_AG`, `ADDR_COSMOS` in `Makefile`** with the addresses from step 1.
+ 3. `make task/tap-agoric-faucet`; follow instructions to tap the faucet; then `touch task/tap-agoric-faucet`
  3. `make task/create-channel` to:
-    - tap cosmos, agoric faucets
+    - tap cosmos faucet
     - create an IBC channel
  4. Take note of the channel ids (details below)
  5. `make start` or `docker-compose up -d` to start the relayer.
