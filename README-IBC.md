@@ -93,8 +93,8 @@ I don't have good notes on how I did this... `agoric start --devnet`? Anyway... 
 ## Create peg and import issuer
 
 
-_IOU pointer to `contract/src/deploy-peg.js`_
-mostly follow pegasus/demo.md
+Using [contract/src/deploy-peg.js](https://github.com/Agoric/agoric-sdk/blob/ibc-example-scripts/packages/pegasus/scripts/deploy-peg.js) based on `pegasus/demo.md`:
+
 
 ```
 $ agoric deploy contract/src/deploy-peg.js
