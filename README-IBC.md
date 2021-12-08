@@ -5,10 +5,10 @@ I got my relayer to relay an IBC payment from the cosmos testnet to our devnet!
 
 ## Starting a hermes relayer between cosmos and agoric testnets
 
-[Hermes: IBC Relayer CLI](https://github.com/informalsystems/ibc-rs/tree/master/relayer-cli)
+_Grab the Makefile etc. by, for example, cloning this gist. Then:_
 
  1. `make task/restore-keys` to:
-    - build a hermes-image (v0.9.0)
+    - build a docker image for the [Hermes IBC Relayer CLI](https://github.com/informalsystems/ibc-rs/tree/master/relayer-cli) (v0.9.0)
     - create a docker volume for the state
     - generate a mnemonic; import ("recover") secrets for accounts on both chains
  2. **Update `ADDR_AG`, `ADDR_COSMOS` in `Makefile`** with the addresses from step 1.
