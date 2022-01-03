@@ -59,3 +59,9 @@ task/tap-agoric-faucet: hermes.config
 	docker run --rm $(IMAGE_AGORIC) --node $(RPC_AG) query bank balances $(ADDR_AG)
 	@echo otherwise, touch $@
 	exit 1
+
+realclean:
+	rm -rf task
+	rm -rf $(KEYFILE)
+	docker-compose down -v
+	docker volume remove hermes-home
