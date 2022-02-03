@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: hermes.Dockerfile
       args:
-        TAG: hu55a1n1/1793-begin-end-block-chan-events
+        TAG: romac/1837-non-standard-port
     image: hermes:0.11.0
     volumes:
       - "hermes-home:/home/hermes"
