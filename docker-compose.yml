@@ -1,12 +1,13 @@
 version: "3.9"
 services:
   hermes:
+    network_mode: host
     build:
       context: .
       dockerfile: hermes.Dockerfile
       args:
-        TAG: v0.9.0
-    image: hermes:0.9.0
+        TAG: hu55a1n1/1793-begin-end-block-chan-events
+    image: hermes:0.11.0
     volumes:
       - "hermes-home:/home/hermes"
       - ".:/config:ro"

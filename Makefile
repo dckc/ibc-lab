@@ -1,8 +1,8 @@
-CHAIN_AG=agoricdev-7
+CHAIN_AG=agoric
 CHAIN_COSMOS=cosmoshub-testnet
-IMAGE_AGORIC=agoric/agoric-sdk:agoricdev-7
+IMAGE_AGORIC=agoric/agoric-sdk:12.0.0
 
-HERMES=docker run --rm -vhermes-home:/home/hermes:z -v$$PWD:/config hermes -c /config/hermes.config
+HERMES=docker run -it --net=host --rm -vhermes-home:/home/hermes:z -v$$PWD:/config hermes -c /config/hermes.config
 
 KEYFILE=ibc-relay-mnemonic
 task/restore-keys: $(KEYFILE) task/hermes-image task/hermes-volume hermes.config
@@ -13,15 +13,15 @@ task/restore-keys: $(KEYFILE) task/hermes-image task/hermes-volume hermes.config
 	mkdir -p task && touch $@
 
 # ISSUE: these are the results of task/restore-keys
-ADDR_AG=agoric16qj02xh6rag5wscgdc4fd9e8j3cmcren47guwe
-ADDR_COSMOS=cosmos1ct7n80pahm0y9tneuhx40vh45yfdcshkwahcfy
+ADDR_AG=agoric19nhr8qgs5twqevffmd0v9jlgu87f4vrw8rpudm
+ADDR_COSMOS=cosmos1gcmx55q080ujz2zed42cfu7vy7jy9xfht3u4uy
 
 start: task/create-channel
 	docker-compose up -d
 
 task/create-channel: hermes.config task/hermes-image task/hermes-volume \
 		task/restore-keys task/tap-cosmos-faucet task/tap-agoric-faucet
-	$(HERMES) create channel $(CHAIN_COSMOS) $(CHAIN_AG) --port-a transfer --port-b transfer -o unordered
+	$(HERMES) create channel $(CHAIN_COSMOS) $(CHAIN_AG) --port-a transfer --port-b pegasus -o unordered -v ics20-1
 	mkdir -p task && touch $@
 
 task/hermes-image: docker-compose.yml hermes.Dockerfile
@@ -49,14 +49,14 @@ task/tap-cosmos-faucet: hermes.config
 	curl -X POST -d '{"address": "$(ADDR_COSMOS)"}' https://faucet.testnet.cosmos.network
 	mkdir -p task && touch $@
 
-RPC_AG=http://46.101.220.43:26657
+RPC_AG=http://127.0.0.1:26657
 
 task/tap-agoric-faucet: hermes.config
 	@echo if the balance below is empty,
 	@echo visit https://agoric.com/discord
 	@echo go to the "#faucet" channel
 	@echo enter: !faucet client $(ADDR_AG)
-	docker run --rm $(IMAGE_AGORIC) --node $(RPC_AG) query bank balances $(ADDR_AG)
+	docker run --rm --net=host $(IMAGE_AGORIC) --node $(RPC_AG) query bank balances $(ADDR_AG)
 	@echo otherwise, touch $@
 	exit 1
 
