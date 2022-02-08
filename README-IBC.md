@@ -172,6 +172,46 @@ await result...
 }
 ```
 
+## Outbound dIBC
+
+In a terminal command line, do:
+
+```
+$ gaiad query bank balances --node=https://rpc.testnet.cosmos.network:443 cosmos1dlua5s27mjvt0tedlfq03m3rc30asvt5wxt5s8
+balances:
+- amount: "100000000"
+  denom: uphoton
+pagination:
+  next_key: null
+  total: "0"
+$
+```
+
+Run `make task/create-connection` (instead of `task/create-channel`), then start Hermes.
+
+In Agoric JS REPL, do:
+
+```
+command[0] c = E(home.ibcport[0]).connect('/ibc-hop/connection-0/ibc-port/transfer/unordered/ics20-1')
+history[0] [Object Alleged: Connection]{}
+command[1] E(c).send(JSON.stringify({ receiver: 'cosmos1dlua5s27mjvt0tedlfq03m3rc30asvt5wxt5s8', sender: 'pegasus', denom: 'hellocoin', amount: '100' }))
+history[1] "{\"result\":\"AQ==\"}"
+```
+
+And again in a terminal:
+```console
+$ gaiad query bank balances --node=https://rpc.testnet.cosmos.network:443 cosmos1dlua5s27mjvt0tedlfq03m3rc30asvt5wxt5s8
+balances:
+- amount: "100"
+  denom: ibc/035F742F3A88371DFBF29C451275DD82CF20986F8F13BF9F8FEE3BFD59F7601D
+- amount: "99993767"
+  denom: uphoton
+pagination:
+  next_key: null
+  total: "0"
+$
+```
+
 ## Acknowledgements
 
 most clues are from

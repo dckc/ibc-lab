@@ -13,8 +13,8 @@ task/restore-keys: $(KEYFILE) task/hermes-image task/hermes-volume hermes.config
 	mkdir -p task && touch $@
 
 # ISSUE: these are the results of task/restore-keys
-ADDR_AG=agoric19nhr8qgs5twqevffmd0v9jlgu87f4vrw8rpudm
-ADDR_COSMOS=cosmos1gcmx55q080ujz2zed42cfu7vy7jy9xfht3u4uy
+ADDR_AG=agoric1qt0tlhwetwlj9z9qhzn8f69p6upux46z0mj6gd
+ADDR_COSMOS=cosmos1dlua5s27mjvt0tedlfq03m3rc30asvt5wxt5s8
 
 start: task/create-channel
 	docker-compose up -d
@@ -22,6 +22,11 @@ start: task/create-channel
 task/create-channel: hermes.config task/hermes-image task/hermes-volume \
 		task/restore-keys task/tap-cosmos-faucet task/tap-agoric-faucet
 	$(HERMES) create channel $(CHAIN_COSMOS) $(CHAIN_AG) --port-a transfer --port-b pegasus -o unordered -v ics20-1
+	mkdir -p task && touch $@
+
+task/create-connection: hermes.config task/hermes-image task/hermes-volume \
+		task/restore-keys task/tap-cosmos-faucet task/tap-agoric-faucet
+	$(HERMES) create connection $(CHAIN_COSMOS) $(CHAIN_AG)
 	mkdir -p task && touch $@
 
 task/hermes-image: docker-compose.yml hermes.Dockerfile
