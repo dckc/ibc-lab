@@ -1,20 +1,25 @@
-CHAIN_AG=agoricdev-6
+CHAIN_AG=agoricdev-8
 CHAIN_COSMOS=cosmoshub-testnet
-IMAGE_AGORIC=agoric/agoric-sdk:agoricdev-6
+IMAGE_AGORIC=agoric/agoric-sdk:agoricdev-8
 
-HERMES=docker run --rm -vhermes-home:/home/hermes:z -v$$PWD:/config hermes -c /config/hermes.config
+HERMES=docker run --rm -vhermes-home:/home/hermes:z -v$$PWD:/config hermes:0.9.0 -c /config/hermes.config
+
+# ISSUE: use matching key names in hermes.config for consistency
+ADDR_AG_KEY=keys/agdevkey
+ADDR_AG := $(shell cat $(ADDR_AG_KEY))
+
+# ISSUE: use matching key names in hermes.config for consistency
+ADDR_COSMOS_KEY=keys/hubkey
+ADDR_COSMOS := $(shell cat ${ADDR_COSMOS_KEY})
 
 KEYFILE=ibc-relay-mnemonic
 task/restore-keys: $(KEYFILE) task/hermes-image task/hermes-volume hermes.config
+	mkdir -p keys; \
 	MNEMONIC="$$(cat $(KEYFILE))"; \
 	echo $$MNEMONIC | sha1sum ; \
-	$(HERMES) keys restore $(CHAIN_AG) -p "m/44'/564'/0'/0/0" -m "$$MNEMONIC"; \
-	$(HERMES) keys restore $(CHAIN_COSMOS) -m "$$MNEMONIC"
+	$(HERMES) keys restore $(CHAIN_AG) -p "m/44'/564'/0'/0/0" -m "$$MNEMONIC" | awk '{print $$5}' | tr -d '()' > $(ADDR_AG_KEY); \
+	$(HERMES) keys restore $(CHAIN_COSMOS) -m "$$MNEMONIC" | awk '{print $$5}' | tr -d '()' > $(ADDR_COSMOS_KEY); \
 	mkdir -p task && touch $@
-
-# ISSUE: these are the results of task/restore-keys
-ADDR_AG=agoric16qj02xh6rag5wscgdc4fd9e8j3cmcren47guwe
-ADDR_COSMOS=cosmos1ct7n80pahm0y9tneuhx40vh45yfdcshkwahcfy
 
 start: task/create-channel
 	docker-compose up -d
