@@ -1,6 +1,6 @@
-CHAIN_AG=agoricdev-6
+CHAIN_AG=agoricdev-8
 CHAIN_COSMOS=cosmoshub-testnet
-IMAGE_AGORIC=agoric/agoric-sdk:agoricdev-6
+IMAGE_AGORIC=agoric/agoric-sdk:agoricdev-8
 
 HERMES=docker run --rm -vhermes-home:/home/hermes:z -v$$PWD:/config hermes -c /config/hermes.config
 
