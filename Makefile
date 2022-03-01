@@ -2,7 +2,7 @@ CHAIN_AG=agoricdev-8
 CHAIN_COSMOS=cosmoshub-testnet
 IMAGE_AGORIC=agoric/agoric-sdk:agoricdev-8
 
-HERMES=docker run --rm -vhermes-home:/home/hermes:z -v$$PWD:/config hermes:0.9.0 -c /config/hermes.config
+HERMES=docker run --rm -vhermes-home:/home/hermes:z -v$$PWD:/config hermes -c /config/hermes.config
 
 # ISSUE: use matching key names in hermes.config for consistency
 ADDR_AG_KEY=keys/agdevkey
@@ -22,7 +22,7 @@ task/restore-keys: $(KEYFILE) task/hermes-image task/hermes-volume hermes.config
 	mkdir -p task && touch $@
 
 start: task/create-channel
-	docker-compose up -d
+	docker-compose up -d hermes-latest
 
 task/create-channel: hermes.config task/hermes-image task/hermes-volume \
 		task/restore-keys task/tap-cosmos-faucet task/tap-agoric-faucet

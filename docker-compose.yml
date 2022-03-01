@@ -1,19 +1,27 @@
 version: "3.7"
+
+x-hermes: &hermes-service-definition
+  build:
+    context: .
+    dockerfile: hermes.Dockerfile
+    args:
+      TAG: "${HERMES_CHECKOUT_TAG:-master}"
+  volumes:
+    - "hermes-home:/home/hermes"
+    - ".:/config:ro"
+  command:
+    - -c
+    - /config/hermes.config
+    - start
+
 services:
-  hermes:
-    build:
-      context: .
-      dockerfile: hermes.Dockerfile
-      args:
-        TAG: v0.9.0
-    image: hermes:0.9.0
-    volumes:
-      - "hermes-home:/home/hermes"
-      - ".:/config:ro"
-    command:
-      - -c
-      - /config/hermes.config
-      - start
+  hermes-tagged:
+    << : *hermes-service-definition
+    image: hermes:${HERMES_BUILD_TAG:?err}
+  hermes-latest:
+    << : *hermes-service-definition
+    image: hermes:latest
+
 volumes:
   hermes-home:
     external: true
