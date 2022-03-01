@@ -5,19 +5,22 @@ I got my relayer to relay an IBC payment from the cosmos testnet to our devnet!
 
 ## Starting a hermes relayer between cosmos and agoric testnets
 
-_Grab the Makefile etc. by, for example, cloning this gist. Then:_
-
- 1. `make task/restore-keys` to:
-    - build a docker image for the [Hermes IBC Relayer CLI](https://github.com/informalsystems/ibc-rs/tree/master/relayer-cli) (v0.9.0)
+1. Setup `.env` file which defines the [Environment Variables for docker-compose.yml](https://docs.docker.com/compose/environment-variables/).
+    - `cp .env.example .env`
+    - Update `.env` file to suit your requirements
+1. `make task/restore-keys` to:
+    - build a docker image for the [Hermes IBC Relayer CLI](https://github.com/informalsystems/ibc-rs/tree/master/relayer-cli) with 2 tags:
+        - value of `HERMES_BUILD_TAG`
+        - `latest`
     - create a docker volume for the state
     - generate a mnemonic; import ("recover") secrets for accounts on both chains
- 2. **Update `ADDR_AG`, `ADDR_COSMOS` in `Makefile`** with the addresses from step 1.
- 3. `make task/tap-agoric-faucet`; follow instructions to tap the faucet; then `touch task/tap-agoric-faucet`
- 3. `make task/create-channel` to:
+    - export these accounts into `keys/` directory
+2. `make task/tap-agoric-faucet`; follow instructions to tap the faucet; then `touch task/tap-agoric-faucet`
+3. `make task/create-channel` to:
     - tap cosmos faucet
     - create an IBC channel
- 4. Take note of the channel ids (details below)
- 5. `make start` or `docker-compose up -d` to start the relayer.
+4. Take note of the channel ids (details below)
+5. `make start` or `docker-compose up -d hermes-latest` to start the relayer.
 
 Creating the IBC channel results in something like this that includes the channel ids:
 
@@ -78,7 +81,7 @@ Success: Channel {
 }
 ```
 
-## Provision user account on agorictest-6
+## Provision user account on agorictest-8
 
 Normally [Setting up an Agoric Dapp Client with docker compose](https://github.com/Agoric/agoric-sdk/wiki/Setting-up-an-Agoric-Dapp-Client-with-docker-compose) would suffice, but:
 
@@ -177,4 +180,3 @@ await result...
 most clues are from
  - [agoric-sdk pegasus/demo.md](https://github.com/Agoric/agoric-sdk/blob/master/packages/pegasus/demo.md)
  - [Agoric ↔ Pooltoy IBC Testnet [WIP]](https://hackmd.io/YYf5lsJXSSuatstpRDSs8g?view)
-
