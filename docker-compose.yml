@@ -1,12 +1,7 @@
 version: "3.9"
 services:
   hermes:
-    build:
-      context: .
-      dockerfile: hermes.Dockerfile
-      args:
-        TAG: v0.9.0
-    image: hermes:0.9.0
+    image: informalsystems/hermes:0.13.0
     volumes:
       - "hermes-home:/home/hermes"
       - ".:/config:ro"
